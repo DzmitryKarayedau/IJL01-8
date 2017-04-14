@@ -1,3 +1,7 @@
+package com.emerline.ijl01_8;
+
+import com.emerline.ijl01_8.utils.CurrencyConverter;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
