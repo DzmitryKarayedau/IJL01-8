@@ -3,7 +3,9 @@ package com.emerline.ijl01_8;
 import com.emerline.ijl01_8.exception.NegativeValueException;
 import com.emerline.ijl01_8.exception.ZeroValueException;
 import com.emerline.ijl01_8.util.CurrencyConverter;
+import com.emerline.ijl01_8.util.CurrencyConverterToUSD;
 
+import java.math.BigDecimal;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -12,16 +14,17 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner in = new Scanner(System.in);
-        double rate;
-        double moneyCount;
+        CurrencyConverterToUSD currencyConverterToUSD;
+        BigDecimal rate;
+        BigDecimal moneyCount;
 
         try {
             System.out.print("Input currency rate: ");
-            rate = in.nextDouble();
+            rate = in.nextBigDecimal();
+            currencyConverterToUSD = new CurrencyConverterToUSD(rate);
             System.out.print("input money count: ");
-            moneyCount = in.nextDouble();
-            System.out.printf("Converted money = %.2f%n ", CurrencyConverter.convertCurrency("USD", rate, moneyCount));
-
+            moneyCount = in.nextBigDecimal();
+            System.out.printf("Converted money = %.2f%n ", currencyConverterToUSD.convertCurrency(moneyCount));
         } catch (InputMismatchException e) {
             System.err.println("Wrong input data");
         } catch (NegativeValueException e) {

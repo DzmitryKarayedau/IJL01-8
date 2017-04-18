@@ -9,22 +9,24 @@ import java.util.Currency;
 /**
  * Created by dzmitry.karayedau on 14-Apr-17.
  */
-public class CurrencyConverter {
+public abstract class CurrencyConverter {
 
-    private static final int[] FRACTION_DIGITS = new int[]{1, 10, 100, 1000};
+    private BigDecimal rate;
+    private int fractionDigits;
 
-
-    public static double convertCurrency(String toCurrency, double rate, double moneyCount) throws ZeroValueException, NegativeValueException {
-        validateData(rate, moneyCount);
-        int toFractionDigits = returnFractionDigits(toCurrency);
-        BigDecimal rateMoney = new BigDecimal(rate);
-        BigDecimal countMoney = new BigDecimal(moneyCount);
-        BigDecimal resultMoney = countMoney.divide(rateMoney, toFractionDigits, BigDecimal.ROUND_HALF_UP);
-        return resultMoney.doubleValue();
-
+    public void CurrencyConverter(String currency, BigDecimal rate) {
+        this.rate = rate;
+        fractionDigits = this.returnFractionDigits(currency);
     }
 
-    private static int returnFractionDigits(String currency) {
+
+    public BigDecimal convertCurrency(BigDecimal moneyCount) throws ZeroValueException, NegativeValueException {
+        validateData(rate, moneyCount);
+        BigDecimal resultMoney = moneyCount.divide(rate, fractionDigits, BigDecimal.ROUND_HALF_UP);
+        return resultMoney;
+    }
+
+    private int returnFractionDigits(String currency) {
         try {
             if (currency == "BYR") {
                 return 2;
@@ -37,12 +39,24 @@ public class CurrencyConverter {
         }
     }
 
-    private static void validateData(double rate, double moneyCount) throws NegativeValueException, ZeroValueException {
-        if (rate == 0) {
+    private void validateData(BigDecimal rate, BigDecimal moneyCount) throws NegativeValueException, ZeroValueException {
+        if ((rate == null)|(moneyCount == null)) {
+            throw new NullPointerException();
+        }
+        if (rate.equals(BigDecimal.ZERO)) {
             throw new ZeroValueException("Zero currency");
         }
-        if ((rate < 0) | (moneyCount < 0)) {
+        if ((rate.compareTo(BigDecimal.ZERO) < 0) | (moneyCount.compareTo(BigDecimal.ZERO) < 0)) {
             throw new NegativeValueException("Negative value");
         }
     }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
 }
