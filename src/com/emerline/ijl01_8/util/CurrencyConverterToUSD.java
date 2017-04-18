@@ -16,16 +16,12 @@ public class CurrencyConverterToUSD extends CurrencyConverter {
         return super.convertCurrency(moneyCount);
     }
 
-    public CurrencyConverterToUSD(BigDecimal rate) {
-        super.CurrencyConverter(CURRENCY , rate);
+    public CurrencyConverterToUSD(BigDecimal rate) throws ZeroValueException, NegativeValueException {
+        super(CURRENCY , rate);
     }
 
     public String getCurrency() {
         return CURRENCY;
-    }
-
-    public void setRate(BigDecimal rate) {
-        super.setRate(rate);
     }
 
     public BigDecimal getRate() {
